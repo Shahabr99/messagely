@@ -48,7 +48,8 @@ class User {
       if(user) {
         const curr_timestamp = new Date()
 
-        await db.query("UPDATE users SET last_login_at = $1 WHERE username = $2 RETURNING last_login_at", [curr_timestamp, username])
+        const results = await db.query("UPDATE users SET last_login_at = $1 WHERE username = $2 RETURNING last_login_at", [curr_timestamp, username]);
+        return results.json(results.rows[0])
       }else{
         throw new ExpressError('User not found', 400)
       }
@@ -60,7 +61,15 @@ class User {
   /** All: basic info on all users:
    * [{username, first_name, last_name, phone}, ...] */
 
-  static async all() { }
+  static async all() {
+    try {
+      const results = await db.query("SELECT * FROM users");
+      if(results.rows.length === 0) throw new ExpressError("Data not found", 404)
+      return results.json(results.rows)
+    }catch(e){
+      return next(e)
+    }
+  }
 
   /** Get: get user by username
    *
@@ -71,7 +80,15 @@ class User {
    *          join_at,
    *          last_login_at } */
 
-  static async get(username) { }
+  static async get(username) { 
+    try{
+      const results = await db.query("SELECT * FROM users WHERE username = $1", [username]);
+      if(results.rows.length === 0) throw new ExpressError("Data not found", 404);
+      return results.json(results.rows[0])
+    }catch(e){
+      return next(e)
+    }
+  }
 
   /** Return messages from this user.
    *
@@ -81,7 +98,15 @@ class User {
    *   {username, first_name, last_name, phone}
    */
 
-  static async messagesFrom(username) { }
+  static async messagesFrom(username) {
+    try {
+      const results = await db.query('SELECT messages.id, messages.to_user, messages.body, messages.sent_at, messages.read_at, users.username, users.first_name, users.last_name, users.phone FROM messages JOIN users ON messages.to_user = users.username WHERE messages.from_user = $1', [username]);
+      if(results.rows.length === 0) return new ExpressError("Data not found", 404)
+      return results.rows
+    }catch(e){
+      return next(e)
+    }
+  }
 
   /** Return messages to this user.
    *
@@ -91,7 +116,15 @@ class User {
    *   {username, first_name, last_name, phone}
    */
 
-  static async messagesTo(username) { }
+  static async messagesTo(username) {
+    try{
+      const results = await db.query("SELECT messages.id, messages. from_user, messages.body, messages.sent_at, messages.read_at, users.username, users.first_name, users.last_name, users.phone FROM messages JOIN users ON messages.from_user = user.username WHERE messages.to_user = $1", [username]);
+      if(results.rows.length === 0) return new ExpressError("data not found", 404)
+      return results.rows
+    }catch(e){
+      return next(e)
+    }
+  }
 }
 
 
