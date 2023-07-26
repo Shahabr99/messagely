@@ -7,8 +7,8 @@ CREATE TABLE users (
     first_name text NOT NULL,
     last_name text NOT NULL,
     phone text NOT NULL,
-    join_at timestamp without time zone NOT NULL,
-    last_login_at timestamp with time zone
+    join_at timestamp without time zone,
+    last_login_at timestamp with time zone,
 );
 
 CREATE TABLE messages (

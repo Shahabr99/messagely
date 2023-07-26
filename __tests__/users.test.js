@@ -13,6 +13,7 @@ describe("Test User class", function () {
       first_name: "Test",
       last_name: "Testy",
       phone: "+14155550000",
+      last_login_at: "2023-07-24 15:30:45"
     });
   });
 

@@ -1,3 +1,7 @@
+const router = express.Router();
+const ExpressError = require('../expressError');
+const SECRET_KEY = require('../config');
+
 /** GET / - get list of users.
  *
  * => {users: [{username, first_name, last_name, phone}, ...]}
