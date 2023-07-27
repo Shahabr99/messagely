@@ -67,7 +67,7 @@ router.post('/:id/read', ensureLoggedIn, async function(req, res, next) {
       throw new ExpressError("access Denied", 403)
     }
     const read = await Message.markRead(id);
-    return res.json({message})
+    return res.json({read})
   }catch(e){
     return next(e)
   }
