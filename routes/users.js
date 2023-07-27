@@ -1,4 +1,4 @@
-const router = express.Router();
+const router = new express.Router();
 const ExpressError = require('../expressError');
 const SECRET_KEY = require('../config');
 const User = require('../models/user');

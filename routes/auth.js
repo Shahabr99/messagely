@@ -1,4 +1,4 @@
-const router = express.Router();
+const router = new express.Router();
 const ExpressError = require('../expressError');
 const User = require('../models');
 const ExpressError = require('../expressError');
